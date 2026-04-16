@@ -6,6 +6,19 @@ import toast from "react-hot-toast";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 
+const AUTH_TIMEOUT_MS = 15000;
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number) {
+  return Promise.race<T>([
+    promise,
+    new Promise<T>((_, reject) => {
+      setTimeout(() => {
+        reject(new Error("Login timed out. Please check your connection and try again."));
+      }, timeoutMs);
+    }),
+  ]);
+}
+
 type AuthModalProps = {
   open: boolean;
   onClose: () => void;
@@ -21,18 +34,30 @@ export function AuthModal({ open, onClose }: AuthModalProps) {
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
     setLoading(true);
-    const supabase = getSupabaseBrowserClient();
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    setLoading(false);
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { error } = await withTimeout(
+        supabase.auth.signInWithPassword({ email, password }),
+        AUTH_TIMEOUT_MS,
+      );
 
-    if (error) {
-      toast.error(error.message);
-      return;
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.success("Logged in successfully.");
+      onClose();
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to sign in right now. Please try again.";
+      toast.error(message);
+    } finally {
+      setLoading(false);
     }
-
-    toast.success("Logged in successfully.");
-    onClose();
   }
 
   return (

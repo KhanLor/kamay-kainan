@@ -159,6 +159,8 @@ Open http://localhost:3000
 - NEXT_PUBLIC_SUPABASE_URL
 - NEXT_PUBLIC_SUPABASE_ANON_KEY
 - NEXT_PUBLIC_GOOGLE_MAPS_API_KEY (optional but recommended for map)
+- GEMINI_API_KEY (required for AI chatbot; server-side)
+- GEMINI_MODEL (optional, defaults to gemini-2.0-flash)
 
 4. Deploy.
 

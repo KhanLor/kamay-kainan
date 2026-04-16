@@ -5,6 +5,19 @@ import toast from "react-hot-toast";
 
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
+const AUTH_TIMEOUT_MS = 15000;
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number) {
+  return Promise.race<T>([
+    promise,
+    new Promise<T>((_, reject) => {
+      setTimeout(() => {
+        reject(new Error("Login timed out. Please check your connection and try again."));
+      }, timeoutMs);
+    }),
+  ]);
+}
+
 export default function LoginPage() {
   const adminUsername = process.env.NEXT_PUBLIC_ADMIN_USERNAME || "admin@kamaykainan.com";
   const adminPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "Admin@123456";
@@ -17,21 +30,33 @@ export default function LoginPage() {
     event.preventDefault();
     setLoading(true);
 
-    const supabase = getSupabaseBrowserClient();
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { data, error } = await withTimeout(
+        supabase.auth.signInWithPassword({ email, password }),
+        AUTH_TIMEOUT_MS,
+      );
 
-    setLoading(false);
-    if (error) {
-      toast.error(error.message);
-      return;
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      const signedInEmail = (data.user?.email || "").toLowerCase();
+      const isAdminByRole = data.user?.app_metadata?.role === "admin";
+      const isAdminByEmail = signedInEmail === adminUsername.toLowerCase();
+
+      toast.success("Welcome back!");
+      window.location.href = isAdminByRole || isAdminByEmail ? "/admin" : "/";
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to sign in right now. Please try again.";
+      toast.error(message);
+    } finally {
+      setLoading(false);
     }
-
-    const signedInEmail = (data.user?.email || "").toLowerCase();
-    const isAdminByRole = data.user?.app_metadata?.role === "admin";
-    const isAdminByEmail = signedInEmail === adminUsername.toLowerCase();
-
-    toast.success("Welcome back!");
-    window.location.href = isAdminByRole || isAdminByEmail ? "/admin" : "/";
   }
 
   return (

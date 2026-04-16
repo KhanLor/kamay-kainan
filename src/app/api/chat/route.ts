@@ -37,16 +37,18 @@ function buildFallbackReply(userMessage: string) {
   return "I can help with menu, location, services, and reservations. Gemini is temporarily unavailable due to API quota, but I can still assist with basic restaurant info.";
 }
 
-export async function POST(request: Request) {
-  const apiKey = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+function getGeminiApiKey() {
+  return (
+    process.env.GEMINI_API_KEY?.trim() ||
+    process.env.GOOGLE_API_KEY?.trim() ||
+    process.env.NEXT_PUBLIC_GEMINI_API_KEY?.trim() ||
+    ""
+  );
+}
 
-  if (!apiKey) {
-    return NextResponse.json(
-      { error: "Missing GEMINI_API_KEY on the server." },
-      { status: 500 },
-    );
-  }
+export async function POST(request: Request) {
+  const apiKey = getGeminiApiKey();
+  const model = process.env.GEMINI_MODEL || "gemini-2.0-flash";
 
   try {
     const body = (await request.json()) as { messages?: ChatMessage[] };
@@ -64,6 +66,7 @@ export async function POST(request: Request) {
       return NextResponse.json({
         reply: buildFallbackReply(lastUserMessage.content),
         fallback: true,
+        warning: "Gemini API key is not configured on the server.",
       });
     }
 

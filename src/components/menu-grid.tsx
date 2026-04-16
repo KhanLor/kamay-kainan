@@ -17,46 +17,65 @@ export function MenuGrid() {
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const supabase = getSupabaseBrowserClient();
+    let supabase: ReturnType<typeof getSupabaseBrowserClient>;
+
+    try {
+      supabase = getSupabaseBrowserClient();
+    } catch {
+      return;
+    }
+
+    let cancelled = false;
 
     async function loadData() {
-      const [itemsRes, categoriesRes] = await Promise.all([
-        supabase
-          .from("menu_items")
-          .select("id, name, description, price, image_url, category_id, categories(id, name)")
-          .order("id", { ascending: true }),
-        supabase.from("categories").select("id, name").order("name", { ascending: true }),
-      ]);
+      try {
+        const [itemsRes, categoriesRes] = await Promise.all([
+          supabase
+            .from("menu_items")
+            .select("id, name, description, price, image_url, category_id, categories(id, name)")
+            .order("id", { ascending: true }),
+          supabase.from("categories").select("id, name").order("name", { ascending: true }),
+        ]);
 
-      if (!itemsRes.error && itemsRes.data?.length) {
-        setItems(
-          (itemsRes.data as JoinedMenuItem[]).map((item) => ({
-            id: item.id,
-            name: item.name,
-            description: item.description,
-            price: item.price,
-            image_url: item.image_url,
-            category_id: item.category_id,
-            category: Array.isArray(item.categories)
-              ? item.categories[0]
-              : undefined,
-          })),
-        );
-      }
+        if (cancelled) {
+          return;
+        }
 
-      if (!categoriesRes.error && categoriesRes.data?.length) {
-        setCategories(categoriesRes.data as Category[]);
+        if (!itemsRes.error && itemsRes.data?.length) {
+          setItems(
+            (itemsRes.data as JoinedMenuItem[]).map((item) => ({
+              id: item.id,
+              name: item.name,
+              description: item.description,
+              price: item.price,
+              image_url: item.image_url,
+              category_id: item.category_id,
+              category: Array.isArray(item.categories)
+                ? item.categories[0]
+                : undefined,
+            })),
+          );
+        }
+
+        if (!categoriesRes.error && categoriesRes.data?.length) {
+          setCategories(categoriesRes.data as Category[]);
+        }
+      } catch {
+        return;
       }
     }
 
-    loadData();
+    void loadData();
 
     const menuChannel = supabase
       .channel("public:menu_items")
-      .on("postgres_changes", { event: "*", schema: "public", table: "menu_items" }, loadData)
+      .on("postgres_changes", { event: "*", schema: "public", table: "menu_items" }, () => {
+        void loadData();
+      })
       .subscribe();
 
     return () => {
+      cancelled = true;
       supabase.removeChannel(menuChannel);
     };
   }, []);

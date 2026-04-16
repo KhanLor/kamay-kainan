@@ -6,6 +6,19 @@ import toast from "react-hot-toast";
 
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 
+const AUTH_TIMEOUT_MS = 15000;
+
+function withTimeout<T>(promise: Promise<T>, timeoutMs: number) {
+  return Promise.race<T>([
+    promise,
+    new Promise<T>((_, reject) => {
+      setTimeout(() => {
+        reject(new Error("Registration timed out. Please check your connection and try again."));
+      }, timeoutMs);
+    }),
+  ]);
+}
+
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,17 +28,29 @@ export default function RegisterPage() {
     event.preventDefault();
     setLoading(true);
 
-    const supabase = getSupabaseBrowserClient();
-    const { error } = await supabase.auth.signUp({ email, password });
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const { error } = await withTimeout(
+        supabase.auth.signUp({ email, password }),
+        AUTH_TIMEOUT_MS,
+      );
 
-    setLoading(false);
-    if (error) {
-      toast.error(error.message);
-      return;
+      if (error) {
+        toast.error(error.message);
+        return;
+      }
+
+      toast.success("Registration successful. Please verify your email.");
+      window.location.href = "/login";
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Unable to register right now. Please try again.";
+      toast.error(message);
+    } finally {
+      setLoading(false);
     }
-
-    toast.success("Registration successful. Please verify your email.");
-    window.location.href = "/login";
   }
 
   return (
