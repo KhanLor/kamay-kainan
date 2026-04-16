@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+:root {
+  --color-cream-50: #fff8ec;
+  --color-cream-100: #f7ecd9;
+  --color-kape-200: #dcb998;
+  --color-kape-300: #c89c74;
+  --color-kape-500: #8c5f3d;
+  --color-kape-700: #613d28;
+  --color-kape-800: #4f2d17;
+  --color-kape-900: #2c170b;
+  --color-kulabo-300: #ffc07b;
+  --color-kulabo-500: #f28a2e;
+  --color-kulabo-600: #d86f16;
+}
+
+@theme inline {
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-display);
+
+  --color-cream-50: var(--color-cream-50);
+  --color-cream-100: var(--color-cream-100);
+  --color-kape-200: var(--color-kape-200);
+  --color-kape-300: var(--color-kape-300);
+  --color-kape-500: var(--color-kape-500);
+  --color-kape-700: var(--color-kape-700);
+  --color-kape-800: var(--color-kape-800);
+  --color-kape-900: var(--color-kape-900);
+  --color-kulabo-300: var(--color-kulabo-300);
+  --color-kulabo-500: var(--color-kulabo-500);
+  --color-kulabo-600: var(--color-kulabo-600);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--font-body), sans-serif;
+  background:
+    radial-gradient(circle at 100% 0%, rgba(255, 192, 123, 0.25), transparent 40%),
+    radial-gradient(circle at 0% 100%, rgba(200, 156, 116, 0.25), transparent 35%),
+    var(--color-cream-50);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display), serif;
+}
+
+.fade-rise {
+  animation: fadeRise 0.7s ease forwards;
+}
+
+@keyframes fadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
