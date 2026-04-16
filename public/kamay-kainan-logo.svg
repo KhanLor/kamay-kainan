@@ -1,0 +1,37 @@
+<svg width="480" height="96" viewBox="0 0 480 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="480" y2="96" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#79B85A"/>
+      <stop offset="0.55" stop-color="#4FA75A"/>
+      <stop offset="1" stop-color="#EA2C88"/>
+    </linearGradient>
+    <linearGradient id="k1" x1="14" y1="12" x2="46" y2="84" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#8D5CF6"/>
+      <stop offset="0.55" stop-color="#F62FA2"/>
+      <stop offset="1" stop-color="#FF7D2E"/>
+    </linearGradient>
+    <linearGradient id="k2" x1="198" y1="12" x2="230" y2="84" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF5B4E"/>
+      <stop offset="0.55" stop-color="#FFE358"/>
+      <stop offset="1" stop-color="#78C850"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="480" height="96" rx="24" fill="url(#bg)"/>
+
+  <path d="M24 14v68" stroke="url(#k1)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M24 48l34-34" stroke="url(#k1)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M24 48l34 34" stroke="url(#k1)" stroke-width="8" stroke-linecap="round"/>
+
+  <path d="M206 14v68" stroke="url(#k2)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M206 48l34-34" stroke="url(#k2)" stroke-width="8" stroke-linecap="round"/>
+  <path d="M206 48l34 34" stroke="url(#k2)" stroke-width="8" stroke-linecap="round"/>
+
+  <text x="64" y="56" fill="#132217" font-family="Georgia, 'Times New Roman', serif" font-size="36" font-weight="700" letter-spacing="1.2">KAMAY KAINAN</text>
+  <text x="64" y="78" fill="#F7FFFA" font-family="Nunito, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="2.4">FILIPINO KITCHEN</text>
+
+  <path d="M0 80C84 58 158 88 242 74C330 58 394 88 480 64V96H0V80Z" fill="#F0148A" fill-opacity="0.94"/>
+  <path d="M0 84C84 62 158 92 242 78C330 62 394 92 480 68" stroke="#FFF3BA" stroke-width="4"/>
+  <path d="M164 68C194 66 212 66 240 72C270 78 290 78 318 82" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+  <path d="M174 74C202 72 220 72 248 78C278 84 300 84 328 88" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round"/>
+</svg>

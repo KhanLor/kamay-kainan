@@ -36,32 +36,7 @@ export function CartView() {
       return;
     }
 
-    const { data: order, error } = await supabase
-      .from("orders")
-      .insert({ user_id: user.id, total, status: "pending" })
-      .select("id")
-      .single();
-
-    if (error || !order) {
-      toast.error(error?.message || "Unable to create order.");
-      return;
-    }
-
-    const orderItems = lines.map((line) => ({
-      order_id: order.id,
-      menu_item_id: line.item.id,
-      quantity: line.quantity,
-    }));
-
-    const { error: itemsError } = await supabase.from("order_items").insert(orderItems);
-
-    if (itemsError) {
-      toast.error(itemsError.message);
-      return;
-    }
-
-    toast.success("Order placed successfully.");
-    clear();
+    toast("Online ordering is currently unavailable.");
   }
 
   return (
@@ -119,7 +94,7 @@ export function CartView() {
           onClick={handleCheckout}
           className="mt-4 w-full rounded-full bg-kulabo-500 px-4 py-3 text-sm font-semibold text-cream-50 transition hover:bg-kulabo-600"
         >
-          Checkout
+          Checkout (Unavailable)
         </button>
       </div>
     </div>

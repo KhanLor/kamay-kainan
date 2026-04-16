@@ -1,17 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --color-cream-50: #fff8ec;
-  --color-cream-100: #f7ecd9;
-  --color-kape-200: #dcb998;
-  --color-kape-300: #c89c74;
-  --color-kape-500: #8c5f3d;
-  --color-kape-700: #613d28;
-  --color-kape-800: #4f2d17;
-  --color-kape-900: #2c170b;
-  --color-kulabo-300: #ffc07b;
-  --color-kulabo-500: #f28a2e;
-  --color-kulabo-600: #d86f16;
+  --color-cream-50: #fbfdf9;
+  --color-cream-100: #eef5ee;
+  --color-kape-200: #d5ddd5;
+  --color-kape-300: #b8c6bb;
+  --color-kape-500: #546b56;
+  --color-kape-700: #334837;
+  --color-kape-800: #243228;
+  --color-kape-900: #16201a;
+  --color-kulabo-300: #8fd9a2;
+  --color-kulabo-500: #1eab61;
+  --color-kulabo-600: #16894d;
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @theme inline {
@@ -40,9 +41,11 @@ body {
   min-height: 100vh;
   font-family: var(--font-body), sans-serif;
   background:
-    radial-gradient(circle at 100% 0%, rgba(255, 192, 123, 0.25), transparent 40%),
-    radial-gradient(circle at 0% 100%, rgba(200, 156, 116, 0.25), transparent 35%),
+    radial-gradient(circle at 100% 0%, rgba(30, 171, 97, 0.07), transparent 34%),
+    radial-gradient(circle at 0% 100%, rgba(22, 137, 77, 0.04), transparent 32%),
+    radial-gradient(circle at 16% 8%, rgba(245, 248, 244, 0.62), transparent 22%),
     var(--color-cream-50);
+  color: var(--color-kape-900);
 }
 
 h1,
@@ -54,8 +57,58 @@ h6 {
   font-family: var(--font-display), serif;
 }
 
-.fade-rise {
-  animation: fadeRise 0.7s ease forwards;
+.fade-rise,
+.motion-stack > *,
+.motion-grid > * {
+  animation: fadeRise 0.7s var(--motion-ease) both;
+}
+
+.motion-stack > *:nth-child(2),
+.motion-grid > *:nth-child(2) {
+  animation-delay: 90ms;
+}
+
+.motion-stack > *:nth-child(3),
+.motion-grid > *:nth-child(3) {
+  animation-delay: 180ms;
+}
+
+.motion-stack > *:nth-child(4),
+.motion-grid > *:nth-child(4) {
+  animation-delay: 270ms;
+}
+
+.motion-stack > *:nth-child(5),
+.motion-grid > *:nth-child(5) {
+  animation-delay: 360ms;
+}
+
+.motion-stack > *:nth-child(6),
+.motion-grid > *:nth-child(6) {
+  animation-delay: 450ms;
+}
+
+.motion-card {
+  transition:
+    transform 280ms var(--motion-ease),
+    box-shadow 280ms var(--motion-ease),
+    border-color 280ms var(--motion-ease),
+    background-color 280ms var(--motion-ease);
+}
+
+.motion-card:hover {
+  transform: translateY(-4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @keyframes fadeRise {

@@ -21,6 +21,7 @@ Modern, mobile-responsive Filipino restaurant web app built with Next.js App Rou
 - Admin dashboard (protected) for category/menu CRUD + image upload
 - Realtime menu and order updates (Supabase Realtime)
 - Contact page with Google Maps API embed and contact form UI
+- Chatbot page powered by Gemini API
 - Optional pages included: order history and profile
 - Reusable components, warm Filipino-inspired palette, responsive layout
 
@@ -97,6 +98,11 @@ Required env vars:
 Also used for contact map:
 
 - NEXT_PUBLIC_GOOGLE_MAPS_API_KEY
+
+Also used for chatbot:
+
+- GEMINI_API_KEY
+- GEMINI_MODEL (optional, defaults to gemini-2.0-flash)
 
 3. Create a Supabase project.
 

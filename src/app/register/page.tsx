@@ -16,15 +16,7 @@ export default function RegisterPage() {
     setLoading(true);
 
     const supabase = getSupabaseBrowserClient();
-    const { data, error } = await supabase.auth.signUp({ email, password });
-
-    if (!error && data.user) {
-      await supabase.from("users").upsert({
-        id: data.user.id,
-        email: data.user.email,
-        role: "customer",
-      });
-    }
+    const { error } = await supabase.auth.signUp({ email, password });
 
     setLoading(false);
     if (error) {
@@ -37,7 +29,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-md rounded-2xl border border-kape-200 bg-white p-6">
+    <div className="mx-auto w-full max-w-md rounded-2xl border border-kape-200 bg-white p-6 motion-card">
       <h1 className="font-serif text-3xl font-bold text-kape-900">Register</h1>
       <p className="mt-1 text-sm text-kape-700">Create your account and start ordering.</p>
 

@@ -7,7 +7,7 @@ export default async function Home() {
   const { items } = await getMenuData();
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-10 motion-stack">
       <HeroSection />
       <FeaturedDishes items={items} />
       <AboutPreview />

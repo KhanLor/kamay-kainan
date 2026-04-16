@@ -70,4 +70,7 @@ export const SITE = {
     "Kamay Kainan brings elevated Filipino comfort food to your table with warm hospitality and bold local flavors.",
   address: "42 Magsaysay Ave, Quezon City, Metro Manila",
   phone: "+63 917 123 4567",
+  email: "info@kamaykainan.com",
+  facebook: "https://www.facebook.com/biglaanmeals?locale=tl_PH",
+  github: "https://github.com/KhanLor",
 };
