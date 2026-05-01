@@ -32,10 +32,52 @@ export default function LoginPage() {
 
     try {
       const supabase = getSupabaseBrowserClient();
-      const { data, error } = await withTimeout(
+      let { data, error } = await withTimeout(
         supabase.auth.signInWithPassword({ email, password }),
         AUTH_TIMEOUT_MS,
       );
+
+      if (error) {
+        const isAdminAttempt =
+          email.trim().toLowerCase() === adminUsername.toLowerCase() &&
+          password.trim() === adminPassword;
+
+        if (isAdminAttempt) {
+          const bootstrapRes = await withTimeout(
+            fetch("/api/admin/bootstrap-login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ email, password }),
+            }),
+            AUTH_TIMEOUT_MS,
+          );
+
+          if (bootstrapRes.ok) {
+            const retry = await withTimeout(
+              supabase.auth.signInWithPassword({ email, password }),
+              AUTH_TIMEOUT_MS,
+            );
+            data = retry.data;
+            error = retry.error;
+          } else {
+            let bootstrapMessage = "Unable to initialize admin account.";
+
+            try {
+              const body = (await bootstrapRes.json()) as { error?: string };
+              if (body.error) {
+                bootstrapMessage = body.error;
+              }
+            } catch {
+              bootstrapMessage = "Unable to initialize admin account.";
+            }
+
+            toast.error(bootstrapMessage);
+            return;
+          }
+        }
+      }
 
       if (error) {
         toast.error(error.message);

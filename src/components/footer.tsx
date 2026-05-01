@@ -72,6 +72,9 @@ export function Footer() {
           </Link>
         </div>
       </div>
+      <div className="border-t border-kape-800 px-4 py-3 text-center text-sm text-cream-300">
+        Developed by <a href="https://khanyao-lor-portfolio.vercel.app/" target="_blank" rel="noopener noreferrer" className="text-yellow-400 underline">Khanyao Lor</a>
+      </div>
     </footer>
   );
 }
